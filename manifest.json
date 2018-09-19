@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Favourites",
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "description": "Simple alternative to Firefox-bookmarks.",
   "homepage_url": "https://flosommerfeld.github.io",
