@@ -14,8 +14,15 @@
 
   "browser_action": {
     "default_icon": "icons/icon_96.png",
-    "default_title": "Historify",
+    "default_title": "Favourites",
     "default_popup": "popup_ui/index.html"
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "favourites@flosommerfeld.addons",
+      "strict_min_version": "42.0"
+    }
   }
 
 }
