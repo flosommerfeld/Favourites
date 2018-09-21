@@ -74,10 +74,18 @@ a:focus {
   margin-left: 6px;
 }
 
-
-img{
+/* Gilt nur für Bilder, die innerhalb von einem <a> Element sind */
+a>img{
   height:30px;
   width: 30px;
   margin-left: 6px;
   border-radius: 1000px;
+}
+
+#settings {
+  cursor: pointer;
+  float: right;
+  vertical-align: middle;
+  margin-right: 2px;
+  line-height: 190%;
 }
