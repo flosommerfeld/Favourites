@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <!-- Lade alle Icons von Fontawesome -->
+  <link rel="stylesheet" href="css/fontawesome-all.css">
+
+  <!-- Font: Roboto -->
+  <link rel="stylesheet" href="css/roboto-font.css">
+
+  <!-- Hauptstyle .css Datei -->
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- Anpassungen der Haupstyle .css Datei -->
+  <link href="css/settings.css" rel="stylesheet">
+
+
+</head>
+
+
+<body>
+
+  <!-- Navigationsleiste -->
+  <div class="navbar">
+    <div class="text">Settings</div>
+  </div>
+
+
+  <!-- Container, der die Tabs bzw. Favourites beinhaltet -->
+  <div class="container" id="tab-container">
+    <!-- Inhalte werden dynamisch hinzugefügt -->
+  </div>
+
+
+  <!-- Container, der den Tab beinhaltet, welcher Favourites hinzufügt -->
+  <div class="container" id="footer-container">
+    <a>
+      <div id="add-favourite" class="button button-delete"><i class="far fa-plus-square button-text"></i></div>
+      <div class="text">Bild:</div>
+      <input type="file" name="favouriteImage" accept="image/*"                   id="image">
+      <div class="text">Name:</div>
+      <input type="text" name="favouriteName" value="Beispiel: Firefox"           id="name">
+      <div class="text">URL:</div>
+      <input type="text" name="favouriteUrl" value="Beispiel: http://firefox.com" id="url">
+    </a>
+  </div>
+
+
+  <!-- JS-Skripts für die dynamische Darstellung bzw. für das dynamische Verhalten -->
+  <script src="js/functions/settings-functions.js"></script>
+  <script src="js/settings.js"></script>
+
+</body>
+
+</html>

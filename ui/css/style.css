@@ -9,16 +9,16 @@ html {
 
 
 
-
-.tab-container {
+.container{
   align-items: center;
   justify-content: column;
   background-color: #673ab7;
   text-decoration: none !important;
 }
 
-.tab-container>div,
-a {
+
+.container>div,
+.container>a {
   font-size: 13px;
 
   height: 45px; /* Höhe der einzelnen Tabs */
@@ -29,10 +29,46 @@ a {
   align-items: center;
 }
 
-.tab-container>a:hover {
+
+.container>a:hover {
   background-color: #ede7f6;
 }
 
+
+
+/* Gilt nur für alle <a> Elemente, die innerhalb des tab-containers sind -> alle Tabs */
+.container>a,
+.container>a:active,
+.container>a:focus {
+  outline: none;
+  text-decoration: none !important;
+  color: black;
+  border-bottom: 1px solid rgba(81, 45, 168, 0.13);
+}
+
+
+
+/* Gilt nur für Bilder, die innerhalb von einem <a> Element sind */
+a>img{
+  height:30px;
+  width: 30px;
+  margin-left: 6px;
+  border-radius: 1000px;
+}
+
+
+
+
+.text {
+  margin-left: 6px;
+}
+
+/* Entferne die "komischen" Farben vom Zahnrad-Icon usw. */
+.text>a{
+  color: white;
+  outline: none;
+  text-decoration: none !important;
+}
 
 
 
@@ -48,8 +84,9 @@ a {
 .navbar>div {
   color: white;
   padding: .3em;
-  border-radius: 3px;
+  /*border-radius: 3px;*/
 }
+
 
 
 
@@ -60,27 +97,6 @@ a {
 
 
 
-/* Alle a Elemente sind in der Oberfäche eig. "Tabs" */
-a,
-a:active,
-a:focus {
-  outline: none;
-  text-decoration: none !important;
-  color: black;
-  border-bottom: 1px solid rgba(81, 45, 168, 0.13);
-}
-
-.text {
-  margin-left: 6px;
-}
-
-/* Gilt nur für Bilder, die innerhalb von einem <a> Element sind */
-a>img{
-  height:30px;
-  width: 30px;
-  margin-left: 6px;
-  border-radius: 1000px;
-}
 
 #settings {
   cursor: pointer;

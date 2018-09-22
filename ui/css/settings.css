@@ -1,0 +1,64 @@
+.container>a:hover {
+  background-color: white;
+  cursor: default;
+}
+
+.container>div,
+.container>a {
+  padding: 0px;
+}
+
+#footer-container{
+  border-top-style: solid;
+  border-top-color: #dedede;
+  border-top-width: 1px;
+}
+.navbar{
+  border-radius: 5px 5px 0 0;
+}
+
+
+/* Style für die Buttons mit welchen man Tabs erstellen kann usw. */
+.button{
+  display:block;
+  background-color: #f5f5f5;
+  border-radius: 0px;
+  height: 45px;
+  width: 45px;
+  margin-right: 3px;
+  border-bottom-style: solid;
+  border-bottom-color: #c2c2c2;
+  border-bottom-width: 1px;
+}
+
+.button:hover {
+    background-color: #dedede;
+    cursor:pointer;
+}
+
+.button-text {
+  color:#3c3c3c;
+  width: 45px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 45px;
+  text-align: center;
+}
+
+.button-delete{
+  margin-right: 0;
+  border-right-style: solid;
+  border-right-color: #c2c2c2;
+  border-right-width: 1px;
+}
+
+.button-edit{
+  /* Braucht nichts da nur beim delete button ein Rand sein soll */
+}
+
+
+input{
+  margin-left: 9px;
+}
