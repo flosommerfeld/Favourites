@@ -7,6 +7,6 @@ if (localStorage.getItem("initialized") == null || localStorage.getItem("initial
 }
 
 
-/* Lade die Tabs aus dem lokalen Speicher und füge sie dem DOM hinzu (-> Funktion onGot) */
+/* Lade die Tabs aus dem lokalen Speicher und füge sie dem DOM hinzu (-> Funktion visualizeFavourites) */
 let tabs = browser.storage.local.get("tabs");
-tabs.then(onGot, onError);
+tabs.then(visualizeFavourites, onError);

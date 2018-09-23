@@ -1,4 +1,3 @@
-
 /*
  * Name der Funktion:
  * onError
@@ -12,15 +11,16 @@ function onError(error) { //log errors
 }
 
 
+
 /*
  * Name der Funktion:
- * onGot
+ * visualizeFavourites
  *
  * Beschreibung:
  * Wird ausgeführt, wenn bei einem 'Versprechen'/'Promise' KEIN Fehler auftritt
  *
  */
-function onGot(item) {
+function visualizeFavourites(item) {
 
   var tabs = item.tabs;
   var tabContainer = document.getElementById("tab-container");

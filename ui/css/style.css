@@ -56,7 +56,10 @@ a>img{
   border-radius: 1000px;
 }
 
-
+/* Verstecke dir url von jedem Favourite */
+a>.url{
+  display: none;
+}
 
 
 .text {
