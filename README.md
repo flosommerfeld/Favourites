@@ -2,7 +2,7 @@
 
 Favourites is a Mozilla Firefox WebExtension which can be used as an alternative to the common Firefox bookmarks. Favourites adds an icon to your browsers toolbar from which you can access all of your saved pages. The user can manage his favourite pages inside the WebExtensions settings page.
 
-[![Mozilla Add-on](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://addons.mozilla.org/en-US/firefox/addon/historify/) 
+[![Mozilla Add-on](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://github.com/flosommerfeld/Favourites/releases/tag/v1.1.0) 
 
 ![picture alt](https://i.imgur.com/5cmaXY5.png "Demo screenshot") 
 
@@ -18,7 +18,7 @@ Visualized project structure:
 For additional information on Mozilla Firefox WebExtensions please visit [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension).
 
 ## Getting Started
-To install the WebExtension please visit [addons.mozilla.org](http://addons.mozilla.org) and click the "add to Firefox" button. Alternatively you can also install it manually by downloading the installables from the projects [releases page](http://github.com/releases). If you want to install the extension manually, you have to drag&drop the installable (.xpi file) into your browser window and click the 'add' button. 
+To install the WebExtension please visit [addons.mozilla.org](http://addons.mozilla.org) and click the "add to Firefox" button. Alternatively you can also install it manually by downloading the installables from the projects [releases page](https://github.com/flosommerfeld/Favourites/releases). If you want to install the extension manually, you have to drag&drop the installable (.xpi file) into your browser window and click the 'add' button. 
 
 After installing you can click on the icon in the toolbar, then click the cogwheel to open settings and finally setup your favourite websites by typing in the details and clicking the add button.
 
@@ -38,6 +38,7 @@ After installing you can click on the icon in the toolbar, then click the cogwhe
 #### Known bugs:
 * If the first favourite is deleted the new first favourite doesn't have round corners.
 * If many favourites are added, scrolling bars show up.
+* If a favourite is changed and the user doesn't select an image, the image is changed to the default one.
 
 
 ## Contact
