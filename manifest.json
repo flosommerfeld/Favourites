@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Favourites",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "permissions": ["storage"],
 
   "description": "Simple alternative to Firefox-bookmarks.",
