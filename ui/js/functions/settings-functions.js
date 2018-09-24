@@ -55,73 +55,73 @@ function visualizeFavourites(item) {
 
   tabContainer.innerHTML = "";
 
-  /* Überprüfe, ob das JSON Objekt leer ist */
-  if (tabs.length == 0) {
-    /* Mache.. */
-    console.log("tabslaenge ist 0");
-  } else {
 
-    /* Iterriere jeden Tab und füge ihn zur HTML-Seite hinzu */
-    for (i in tabs) {
+  /* Überprüfe, ob der JSON Objektarray, der die Favourites beinhaltet scon initalisiert ist */
+  if(tabs == undefined || tabs == null || tabs.length == 0){
+    browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
+        tabs: []
+    });
+  }
 
-      /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
-      if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image == "img/noImage.png")) {
+  /* Iterriere jeden Tab und füge ihn zur HTML-Seite hinzu */
+  for (i in tabs) {
 
-        /* Aufbau eines Tabs in der Settings-Seite:
-         *
-         * <a id="0">
-         *   <div class="button button-delete" style=""><i class="far fa-trash-alt button-text"></i></div>
-         *   <div class="button button-edit" style=""><i class="far fa-edit button-text"></i></div>
-         *   <img src="img/office.png">
-         *   <div class="text">Office 365</div>
-         * </a>
-         *
-         */
+    /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
+    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image == "img/noImage.png")) {
 
-
-        /* Erstelle <a> Element und setze die ID auf den Index der for-Loop */
-        let a = document.createElement("a");
-        a.id = "" + i;
+      /* Aufbau eines Tabs in der Settings-Seite:
+       *
+       * <a id="0">
+       *   <div class="button button-delete" style=""><i class="far fa-trash-alt button-text"></i></div>
+       *   <div class="button button-edit" style=""><i class="far fa-edit button-text"></i></div>
+       *   <img src="img/office.png">
+       *   <div class="text">Office 365</div>
+       * </a>
+       *
+       */
 
 
-        /* Erstelle div Element und setze die Klasse des Elements */
-        let divBtnDelete = document.createElement("div");
-        divBtnDelete.className = "button button-delete";
-        divBtnDelete.innerHTML = "<i class='far fa-trash-alt button-text'></i>";
-        divBtnDelete.addEventListener('click', masterEventHandler, false);
-
-        /* Erstelle div Element und setze die Klasse des Elements */
-        let divBtnEdit = document.createElement("div");
-        divBtnEdit.className = "button button-edit";
-        divBtnEdit.innerHTML = "<i class='far fa-edit button-text'></i>";
-        divBtnEdit.addEventListener('click', masterEventHandler, false);
-
-        /* Erstelle <img> Element und weise dem Element das Bild zu */
-        let img = document.createElement("img");
-        img.src = tabs[i].image;
-
-        /* Erstelle div Element und setze die Klasse des Elements */
-        let divText = document.createElement("div");
-        divText.className = "text";
-        divText.innerHTML = tabs[i].title;
-
-        /* Speichere die url im Tab damit sie später verarbeitet werden kann */
-        let divURL = document.createElement("div");
-        divURL.className = "url";
-        divURL.innerHTML = tabs[i].url;
+      /* Erstelle <a> Element und setze die ID auf den Index der for-Loop */
+      let a = document.createElement("a");
+      a.id = "" + i;
 
 
-        /* Hänge das <img> und alle <div> Element an das <a> Element */
-        a.appendChild(divBtnDelete);
-        a.appendChild(divBtnEdit);
-        a.appendChild(img);
-        a.appendChild(divText);
-        a.appendChild(divURL);
+      /* Erstelle div Element und setze die Klasse des Elements */
+      let divBtnDelete = document.createElement("div");
+      divBtnDelete.className = "button button-delete";
+      divBtnDelete.innerHTML = "<i class='far fa-trash-alt button-text'></i>";
+      divBtnDelete.addEventListener('click', masterEventHandler, false);
 
-        /* Hänge den fertigen Tab an den Tab-Container */
-        tabContainer.appendChild(a);
+      /* Erstelle div Element und setze die Klasse des Elements */
+      let divBtnEdit = document.createElement("div");
+      divBtnEdit.className = "button button-edit";
+      divBtnEdit.innerHTML = "<i class='far fa-edit button-text'></i>";
+      divBtnEdit.addEventListener('click', masterEventHandler, false);
 
-      }
+      /* Erstelle <img> Element und weise dem Element das Bild zu */
+      let img = document.createElement("img");
+      img.src = tabs[i].image;
+
+      /* Erstelle div Element und setze die Klasse des Elements */
+      let divText = document.createElement("div");
+      divText.className = "text";
+      divText.innerHTML = tabs[i].title;
+
+      /* Speichere die url im Tab damit sie später verarbeitet werden kann */
+      let divURL = document.createElement("div");
+      divURL.className = "url";
+      divURL.innerHTML = tabs[i].url;
+
+
+      /* Hänge das <img> und alle <div> Element an das <a> Element */
+      a.appendChild(divBtnDelete);
+      a.appendChild(divBtnEdit);
+      a.appendChild(img);
+      a.appendChild(divText);
+      a.appendChild(divURL);
+
+      /* Hänge den fertigen Tab an den Tab-Container */
+      tabContainer.appendChild(a);
     }
   }
 }
