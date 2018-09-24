@@ -32,9 +32,7 @@ function encodeImageFileAsURL(element) {
   var file = element.files[0];
   var reader = new FileReader();
   reader.onloadend = function() {
-    console.log('RESULT', reader.result);
     favouriteImage = reader.result;
-    console.log("Favouriteimage:" + favouriteImage);
   }
   reader.readAsDataURL(file);
 }

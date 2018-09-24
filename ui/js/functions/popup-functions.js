@@ -32,6 +32,9 @@ function visualizeFavourites(item) {
     browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
         tabs: []
     });
+
+    /* Show message: Add favourites via settings page... */
+    document.getElementById("no-favourites-message").style.display="flex";/* vorher block */
   }
 
 
