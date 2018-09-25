@@ -8,6 +8,8 @@ html {
   min-width: 155px;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 
