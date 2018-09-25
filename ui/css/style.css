@@ -97,7 +97,7 @@ a>.url{
 
 
 /* Der erste tab soll einen abgerundeten Rahmen haben */
-#first-tab {
+#tab-container > *:first-child{
   border-radius: 4px 4px 0px 0px;
 }
 

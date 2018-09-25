@@ -56,9 +56,6 @@ function visualizeFavourites(item) {
       /* Erstelle <a> Element und weise dem Element die url zu */
       let a = document.createElement("a");
       a.href = tabs[i].url;
-      if (i == 0) {
-        a.id = "first-tab";
-      }
 
       /* Erstelle <img> Element und weise dem Element das Bild zu */
       let img = document.createElement("img");
