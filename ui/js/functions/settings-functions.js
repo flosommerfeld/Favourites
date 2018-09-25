@@ -286,11 +286,18 @@ function masterEventHandler(e) {
     favouriteURL = aElement.childNodes[4].value
     favouriteName = aElement.childNodes[3].value;
 
-    /* Bekomme das Bild aus dem Input Element, welches in a ist */
+    /* Wenn kein neues Bild beim Editieren hochgeladen wird */
     if (aElement.childNodes[2].files.length == 0) {
-      /* Setze default Bild */
-      favouriteImage = "img/noImage.png";
-    } else {
+
+      let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
+      tabs1.then(function(item) {
+        /* Überprüfe, ob bereits ein Bild vor dem editieren existierte (wenn nicht dann nimm standardbild) */
+        if(item.tabs[arrayIndex].image.startsWith("data:image") == false){
+          favouriteImage = "img/noImage.png";
+        }
+      }, onError); //promise
+
+    }else{/* Wenn ein neues Bild beim Editieren hochgeladen wurde */
       /* Hochgeladenes Bild zu Base64 encoden */
       encodeImageFileAsURL(aElement.childNodes[2]);
     }
