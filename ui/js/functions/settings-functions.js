@@ -65,7 +65,7 @@ function visualizeFavourites(item) {
   for (i in tabs) {
 
     /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
-    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image == "img/noImage.png")) {
+    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http") || tabs[i].image == "img/noImage.png")) {
 
       /* Aufbau eines Tabs in der Settings-Seite:
        *

@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "Favourites",
   "version": "1.1.0",
-  "permissions": ["storage"],
+  "permissions": ["storage", "contextMenus", "activeTab"],
 
   "description": "Simple alternative to Firefox-bookmarks.",
   "homepage_url": "https://flosommerfeld.github.io",
@@ -11,6 +11,10 @@
 
   "icons": {
     "96": "icons/icon_96.png"
+  },
+
+  "background": {
+  "scripts": ["background-script.js"]
   },
 
   "options_ui": {
