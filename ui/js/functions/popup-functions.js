@@ -28,13 +28,13 @@ function visualizeFavourites(item) {
 
 
   /* Überprüfe, ob der JSON Objektarray, der die Favourites beinhaltet scon initalisiert ist */
-  if(tabs == undefined || tabs == null || tabs.length == 0){
+  if (tabs == undefined || tabs == null || tabs.length == 0) {
     browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
-        tabs: []
+      tabs: []
     });
 
     /* Show message: Add favourites via settings page... */
-    document.getElementById("no-favourites-message").style.display="flex";/* vorher block */
+    document.getElementById("no-favourites-message").style.display = "flex"; /* vorher block */
   }
 
 
@@ -42,7 +42,7 @@ function visualizeFavourites(item) {
   for (i in tabs) {
 
     /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
-    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image == "img/noImage.png")) {
+    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http") || tabs[i].image == "img/noImage.png")) {
 
       /* Aufbau eines Tabs:
        *

@@ -55,17 +55,16 @@ function visualizeFavourites(item) {
 
 
   /* Überprüfe, ob der JSON Objektarray, der die Favourites beinhaltet scon initalisiert ist */
-  if(tabs == undefined || tabs == null || tabs.length == 0){
+  if (tabs == undefined || tabs == null || tabs.length == 0) {
     browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
-        tabs: []
+      tabs: []
     });
   }
 
   /* Iterriere jeden Tab und füge ihn zur HTML-Seite hinzu */
   for (i in tabs) {
-
     /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
-    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image == "img/noImage.png")) {
+    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http") || tabs[i].image == "img/noImage.png")) {
 
       /* Aufbau eines Tabs in der Settings-Seite:
        *
@@ -193,7 +192,6 @@ function changeFavourite(item) {
  *
  */
 function addFavourite(item) {
-
   item.tabs.push({
     "image": favouriteImage,
     "url": favouriteURL,
@@ -245,7 +243,6 @@ function masterEventHandler(e) {
 
   /* Finde durch den Klassenname heraus, ob der Edit oder ein anderer Button der den masterEventHandler benutzt geklickt wurde --->(Remove Button)*/
   if (buttonElement.className.indexOf("edit") !== -1) {
-    console.log("Edit button geklickt");
 
     /* Nachden der Change Button geklickt wurde soll man die Werte ändern können
     -> Erstelle Elemente (bzw. input Elemente) und ersetze die alten Elemente */
@@ -291,13 +288,21 @@ function masterEventHandler(e) {
 
       let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
       tabs1.then(function(item) {
+        //TODO if abfrage entfernen...
         /* Überprüfe, ob bereits ein Bild vor dem editieren existierte (wenn nicht dann nimm standardbild) */
-        if(item.tabs[arrayIndex].image.startsWith("data:image") == false){
+        if (item.tabs[arrayIndex].image.startsWith("data:image") == false) {
           favouriteImage = "img/noImage.png";
         }
+
+        /* Wenn das Bild über url geholt wird */
+        if (item.tabs[arrayIndex].image.startsWith("http") == true || item.tabs[arrayIndex].image.startsWith("data:image") == true) {
+          favouriteImage = item.tabs[arrayIndex].image + ""; //TODO herausfinden weshalb hier favouriteImage geändert werden muss
+        }
+
+
       }, onError); //promise
 
-    }else{/* Wenn ein neues Bild beim Editieren hochgeladen wurde */
+    } else { /* Wenn ein neues Bild beim Editieren hochgeladen wurde */
       /* Hochgeladenes Bild zu Base64 encoden */
       encodeImageFileAsURL(aElement.childNodes[2]);
     }
@@ -320,7 +325,6 @@ function masterEventHandler(e) {
  *
  */
 document.getElementById("add-favourite").onclick = function() {
-
   var image = document.getElementById("image");
 
   /* Überprüfe, ob der Benutzer kein Bild hochgeladen hat */

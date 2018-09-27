@@ -136,3 +136,8 @@ a>.url{
   color: #f5f5f5;
   margin-bottom: 0.5em;
 }
+
+
+.container>a>.text{
+  margin-right: 6px;
+}
