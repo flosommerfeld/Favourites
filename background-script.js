@@ -43,12 +43,21 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
       /* Lade die Tabs aus dem lokalen Speicher */
       let tabs = browser.storage.local.get("tabs");
       tabs.then(function(item) {
+        let image = tab.favIconUrl;
+        let url = tab.url
+        let title = tab.title;
+
+        //Sorge dafür, dass wenn das faviconbild nicht exisitert für standardbild
+        //TODO Allg. Funktion fürs Hinzufügen von fvourites, die alles überprüft
+        if (image == null) {
+          image = "img/noImage.png";
+        }
 
           /* Füge die aktuelle Seite zu den Favourite hinzu */
           item.tabs.push({
-            "image": tab.favIconUrl,
-            "url": tab.url,
-            "title": tab.title
+            "image": image,
+            "url": url,
+            "title": title
           });
 
           /* Speicher alle Änderungen, die dem Item zugefügt wurden */

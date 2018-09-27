@@ -288,13 +288,14 @@ function masterEventHandler(e) {
 
       let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
       tabs1.then(function(item) {
+        //TODO if abfrage entfernen...
         /* Überprüfe, ob bereits ein Bild vor dem editieren existierte (wenn nicht dann nimm standardbild) */
         if (item.tabs[arrayIndex].image.startsWith("data:image") == false) {
           favouriteImage = "img/noImage.png";
         }
 
         /* Wenn das Bild über url geholt wird */
-        if (item.tabs[arrayIndex].image.startsWith("http") == true) {
+        if (item.tabs[arrayIndex].image.startsWith("http") == true || item.tabs[arrayIndex].image.startsWith("data:image") == true) {
           favouriteImage = item.tabs[arrayIndex].image + ""; //TODO herausfinden weshalb hier favouriteImage geändert werden muss
         }
 
