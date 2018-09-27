@@ -49,8 +49,6 @@ html {
   text-decoration: none !important;
   color: black;
   border-bottom: 1px solid rgba(81, 45, 168, 0.13);
-  padding-right: 8px;
-  padding-left: 8px;
 }
 
 
@@ -59,7 +57,7 @@ html {
 a>img{
   height:30px;
   width: 30px;
-/*  margin-left: 6px;       a hat nun an beiden seiten ein padding damit auch der text nicht komplett am rand ist      */
+  margin-left: 6px;
   border-radius: 1000px;
 }
 
@@ -137,4 +135,9 @@ a>.url{
   font-size: 3.5em;
   color: #f5f5f5;
   margin-bottom: 0.5em;
+}
+
+
+.container>a>.text{
+  margin-right: 6px;
 }
