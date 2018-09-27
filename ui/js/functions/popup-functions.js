@@ -28,13 +28,13 @@ function visualizeFavourites(item) {
 
 
   /* Überprüfe, ob der JSON Objektarray, der die Favourites beinhaltet scon initalisiert ist */
-  if(tabs == undefined || tabs == null || tabs.length == 0){
+  if (tabs == undefined || tabs == null || tabs.length == 0) {
     browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
-        tabs: []
+      tabs: []
     });
 
     /* Show message: Add favourites via settings page... */
-    document.getElementById("no-favourites-message").style.display="flex";/* vorher block */
+    document.getElementById("no-favourites-message").style.display = "flex"; /* vorher block */
   }
 
 
