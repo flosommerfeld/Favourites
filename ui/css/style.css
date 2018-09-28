@@ -97,6 +97,18 @@ a>.url{
 
 
 
+a input{
+  width: -moz-available;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+a{
+  overflow-x: auto;
+}
+
+
+
 
 /* Der erste tab soll einen abgerundeten Rahmen haben */
 #tab-container > *:first-child{
