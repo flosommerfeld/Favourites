@@ -5,6 +5,10 @@ Favourites is a Mozilla Firefox WebExtension which can be used as an alternative
 [![Mozilla Add-on](https://img.shields.io/badge/Version-1.2.0-green.svg)](https://github.com/flosommerfeld/Favourites/releases/tag/v1.2.0)
 
 ![picture alt](https://i.imgur.com/5cmaXY5.png "Demo screenshot")
+![picture alt](https://i.imgur.com/9t5fsag.gif "Context menu demo")
+
+![picture alt](https://i.imgur.com/fIgy4mk.png "Settings demo")
+
 
 ## Core Technical Concepts
 Favourites uses the [WebExtension Storage API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage) which enables the WebExtension to locally save all of the users favourite websites. The WebExtension only uses a [popup page](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups) and an [options page](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Options_pages), no [background scripts](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_pages) or [content scripts](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts). The popup page is used to show the user his favourite websites and the options page is used to manage these websites.
