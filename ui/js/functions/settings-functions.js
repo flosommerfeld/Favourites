@@ -49,11 +49,34 @@ function encodeImageFileAsURL(element) {
  * url: Die url, welche validiert werden soll
  */
 function isUrlValid(url) {
-    var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-    if(res == null)
-        return false;
-    else
-        return true;
+  var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+  if (res == null)
+    return false;
+  else
+    return true;
+}
+
+
+
+/* Name der Funktion:
+ * isImageValid
+ *
+ * Beschreibung:
+ * Validiert die hochgeladenen Datei, welche ein Bild sein sollte -> .png, .jpg, .jpeg
+ *
+ * Parameter:
+ * element: Das Bild (als element), welches validiert werden soll
+ */
+function isImageValid(element) {
+  var supportedTypes = ["image/png", "image/jpg", "image/jpeg"];
+
+  for (var i = 0; i < supportedTypes.length; i++) {
+    if (supportedTypes[i] == element.files[0].type) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 
@@ -275,7 +298,7 @@ function masterEventHandler(e) {
     let inputImg = document.createElement("input");
     inputImg.type = "file";
     inputImg.name = "favouriteImage";
-    inputImg.accept = "image/*";
+    inputImg.accept = ".png, .jpg, .jpeg";
     aElement.replaceChild(inputImg, aElement.childNodes[2]); //Das img Element ist immer das 3 child von a im DOM
 
     let inputName = document.createElement("input");
@@ -322,8 +345,16 @@ function masterEventHandler(e) {
       }, onError); //promise
 
     } else { /* Wenn ein neues Bild beim Editieren hochgeladen wurde */
-      /* Hochgeladenes Bild zu Base64 encoden */
-      encodeImageFileAsURL(aElement.childNodes[2]);
+
+      /* Überprüfen, ob das hochgeladene Bild valid ist */
+      if (isImageValid(aElement.childNodes[2])) {
+        /* Hochgeladenes Bild zu Base64 encoden */
+        encodeImageFileAsURL(aElement.childNodes[2]);
+      } else {
+        /* Setze default Bild */
+        favouriteImage = "img/noImage.png";
+      }
+
     }
 
     /* -> changeFavourite: Ändere die Werte, speicher den Array und refreshe den DOM */
@@ -344,34 +375,42 @@ function masterEventHandler(e) {
  *
  */
 document.getElementById("add-favourite").onclick = function() {
-    let imageElement = document.getElementById("image");
-    let titleElement = document.getElementById("name");
-    let urlElement = document.getElementById("url");
+  let imageElement = document.getElementById("image");
+  let titleElement = document.getElementById("name");
+  let urlElement = document.getElementById("url");
 
-    /* Überprüfe, ob die Benutzereingaben korrekt sind und füge dann den favourite hinzu */
-    if (isUrlValid(urlElement.value) && titleElement.value.length > 0) {
-      favouriteName = titleElement.value;
-      favouriteURL = urlElement.value;
+  /* Überprüfe, ob die Benutzereingaben korrekt sind und füge dann den favourite hinzu */
+  if (isUrlValid(urlElement.value) && titleElement.value.length > 0) {
+    favouriteName = titleElement.value;
+    favouriteURL = urlElement.value;
 
-      /* Entferne die border-color die vorher möglicherweise durch falsche Eingaben gesetzt wurde */
-      url.style.removeProperty('border-color');
-      titleElement.style.removeProperty('border-color');
+    /* Entferne die border-color die vorher möglicherweise durch falsche Eingaben gesetzt wurde */
+    url.style.removeProperty('border-color');
+    titleElement.style.removeProperty('border-color');
 
 
-      /* Überprüfe, ob der Benutzer KEIN Bild hochgeladen hat */
-      if (image.files.length == 0) {
+    /* Überprüfe, ob der Benutzer KEIN Bild hochgeladen hat */
+    if (imageElement.files.length == 0) {
+      /* Setze default Bild */
+      favouriteImage = "img/noImage.png";
+    } else {
+
+      //Überprüfe, ob das Bild valid ist
+      if (isImageValid(imageElement)) {
+        /* Hochgeladenes Bild zu Base64 encoden */
+        encodeImageFileAsURL(imageElement);
+      } else {
         /* Setze default Bild */
         favouriteImage = "img/noImage.png";
-      } else {
-        /* Hochgeladenes Bild zu Base64 encoden */ //TODO vorher noch Dateityp überprüfen?
-        encodeImageFileAsURL(image);
       }
 
-      /* Funktion aufrufen, die die input Daten zu einem Favourite macht und ihn hinzufügt */
-      let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
-      tabs1.then(addFavourite, onError); //promise
+    }
 
-    } else {/* Wenn eine der Angaben nicht korrekt war, überprüfe welche und färbe die Border des Elements ein */
+    /* Funktion aufrufen, die die input Daten zu einem Favourite macht und ihn hinzufügt */
+    let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
+    tabs1.then(addFavourite, onError); //promise
+
+  } else { /* Wenn eine der Angaben nicht korrekt war, überprüfe welche und färbe die Border des Elements ein */
     if (!isUrlValid(urlElement.value)) {
       url.style.setProperty('border-color', '#D32F2F');
     } else {
