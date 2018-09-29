@@ -17,7 +17,7 @@ html {
 .container{
   align-items: center;
   justify-content: column;
-  background-color: #673ab7;/* Das ist die Farbe über den abgerundeten Ecken vom ersten Favourite */
+  background-color: #673ab7;/* Allows us to create the rounded corners which have this color */
   text-decoration: none !important;
 }
 
@@ -25,8 +25,7 @@ html {
 .container>div,
 .container>a {
   font-size: 13px;
-
-  height: 45px; /* Höhe der einzelnen Tabs */
+  height: 45px; /* Height of each favourite/entry */
   color: black;
   background-color: white;
   padding: 2px;
@@ -41,7 +40,7 @@ html {
 
 
 
-/* Gilt nur für alle <a> Elemente, die innerhalb des tab-containers sind -> alle Tabs */
+/* These rules apply for all <a> elements which are inside the tab-container */
 .container>a,
 .container>a:active,
 .container>a:focus {
@@ -53,7 +52,7 @@ html {
 
 
 
-/* Gilt nur für Bilder, die innerhalb von einem <a> Element sind */
+/* Only applies for images which are inside an <a> element */
 a>img{
   height:30px;
   width: 30px;
@@ -61,7 +60,7 @@ a>img{
   border-radius: 1000px;
 }
 
-/* Verstecke dir url von jedem Favourite */
+/* Hide url of each favourite */
 a>.url{
   display: none;
 }
@@ -71,7 +70,7 @@ a>.url{
   margin-left: 6px;
 }
 
-/* Entferne die "komischen" Farben vom Zahnrad-Icon usw. */
+/* Remove weird colors from the cogwheel */
 .text>a{
   color: white;
   outline: none;
@@ -80,7 +79,7 @@ a>.url{
 
 
 
-/* Navigationsleiste */
+/* Navigation bar */
 .navbar {
   font-size: 16px;
   background-color: #673ab7;
@@ -110,7 +109,7 @@ a{
 
 
 
-/* Der erste tab soll einen abgerundeten Rahmen haben */
+/* First child of tab-container should have rounded corners */
 #tab-container > *:first-child{
   border-radius: 4px 4px 0px 0px;
 }
@@ -127,7 +126,7 @@ a{
 }
 
 
-/* Style für den container der Nachricht die sagt, dass keine Favoriten gefunden werden konnten */
+/* Style for the container which tells the user that no favourites are saved */
 #no-favourites-message{
   display: none; /* Hide on default -> visualizeFavourites() shows message if no favourites are saved */
   background-color: white;

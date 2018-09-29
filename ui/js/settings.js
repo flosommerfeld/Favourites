@@ -1,3 +1,3 @@
-/* Lade die Tabs aus dem lokalen Speicher und füge sie dem DOM hinzu (-> Funktion visualizeFavourites) */
-let tabs = browser.storage.local.get("tabs"); //get the JSON object
-tabs.then(visualizeFavourites, onError); //promise
+/* Load the tabs via the Storage API and add them to the DOM -> function: visualizeFavourites() */
+let tabs = browser.storage.local.get("tabs");//get the JSON object array
+tabs.then(visualizeFavourites, onError);//promise
