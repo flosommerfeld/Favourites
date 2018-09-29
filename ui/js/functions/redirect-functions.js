@@ -1,41 +1,41 @@
 /*
- * Name der Funktion:
+ * Name of the function:
  * onError
  *
- * Beschreibung:
- * Gibt Fehler aus, wenn bei einem 'Versprechen'/'Promise' ein Fehler auftritt
+ * Description:
+ * Logs errors in case something goes wrong
  *
  */
 function onError(error) {
-  console.log(`Error: ${error}`);
+  console.log("Error: ${error}");
 }
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * onOpened
  *
- * Beschreibung:
- * Promise/Versprechen - Wird ausgeführt wenn die Options page geöffnet wurde
+ * Description:
+ * Promise - Logs that the options page was opened
  *
  */
  function onOpened() {
-  console.log(`Options page opened`);
+  console.log("Options page opened");
 }
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * onGotTab
  *
- * Beschreibung:
- * Promise/Versprechen - Wird ausgeführt wenn die aktuelle Tab ID erfragt wird und soll dann den Tab schließen
+ * Description:
+ * Promise - Gets the current tab ID and closes it
  *
  */
 function onGotTab(tabInfo) {
   console.log(tabInfo);
 
-  /* Schließe den Tab */
+  /* Close the tab */
   var removing = browser.tabs.remove(tabInfo.id);
   removing.then(onClosed, onError);
 
@@ -43,13 +43,13 @@ function onGotTab(tabInfo) {
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * onClosed
  *
- * Beschreibung:
- * Promise/Versprechen - Wird ausgeführt wenn der Tab geschlossen wurde
+ * Description:
+ * Promise - Logs that the tab was closed
  *
  */
 function onClosed() {
-  console.log(`Tab geschlossen`);
+  console.log("Tab successfully closed");
 }
