@@ -39,6 +39,25 @@ function encodeImageFileAsURL(element) {
 
 
 
+/* Name der Funktion:
+ * isUrlValid
+ *
+ * Beschreibung:
+ * Validiert eine URL
+ *
+ * Parameter:
+ * url: Die url, welche validiert werden soll
+ */
+function isUrlValid(url) {
+    var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    if(res == null)
+        return false;
+    else
+        return true;
+}
+
+
+
 /*
  * Name der Funktion:
  * visualizeFavourites
@@ -325,23 +344,45 @@ function masterEventHandler(e) {
  *
  */
 document.getElementById("add-favourite").onclick = function() {
-  var image = document.getElementById("image");
+    let imageElement = document.getElementById("image");
+    let titleElement = document.getElementById("name");
+    let urlElement = document.getElementById("url");
 
-  /* Überprüfe, ob der Benutzer kein Bild hochgeladen hat */
-  if (image.files.length == 0) {
-    /* Setze default Bild */
-    favouriteImage = "img/noImage.png";
-  } else {
-    /* Hochgeladenes Bild zu Base64 encoden */
-    encodeImageFileAsURL(image);
+    /* Überprüfe, ob die Benutzereingaben korrekt sind und füge dann den favourite hinzu */
+    if (isUrlValid(urlElement.value) && titleElement.value.length > 0) {
+      favouriteName = titleElement.value;
+      favouriteURL = urlElement.value;
+
+      /* Entferne die border-color die vorher möglicherweise durch falsche Eingaben gesetzt wurde */
+      url.style.removeProperty('border-color');
+      titleElement.style.removeProperty('border-color');
+
+
+      /* Überprüfe, ob der Benutzer KEIN Bild hochgeladen hat */
+      if (image.files.length == 0) {
+        /* Setze default Bild */
+        favouriteImage = "img/noImage.png";
+      } else {
+        /* Hochgeladenes Bild zu Base64 encoden */ //TODO vorher noch Dateityp überprüfen?
+        encodeImageFileAsURL(image);
+      }
+
+      /* Funktion aufrufen, die die input Daten zu einem Favourite macht und ihn hinzufügt */
+      let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
+      tabs1.then(addFavourite, onError); //promise
+
+    } else {/* Wenn eine der Angaben nicht korrekt war, überprüfe welche und färbe die Border des Elements ein */
+    if (!isUrlValid(urlElement.value)) {
+      url.style.setProperty('border-color', '#D32F2F');
+    } else {
+      url.style.removeProperty('border-color');
+    }
+    if (titleElement.value.length == 0) {
+      titleElement.style.setProperty('border-color', '#D32F2F');
+    } else {
+      titleElement.style.removeProperty('border-color');
+    }
   }
 
-  favouriteName = document.getElementById("name").value;
-  favouriteURL = document.getElementById("url").value;
-
-  /* Funktion aufrufen, die die input Daten zu einem Favourite macht und ihn hinzufügt */
-  let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
-  tabs1.then(addFavourite, onError); //promise
 }
-
 /***********************************************************/
