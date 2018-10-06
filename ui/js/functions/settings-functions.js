@@ -1,316 +1,436 @@
-/********************* Globale Variablen *********************/
-var favouriteImage; /* Das Bild von dem Favourite */
-var favouriteName; /* Der Name von dem Favourite */
-var favouriteURL; /* Die URL von dem Favourite */
+/********************* Global variables *********************/
+var favouriteImage; /* Image of the favourite */
+var favouriteName; /* Name/title of the favourite */
+var favouriteURL; /* URL of the favourite */
 
-var arrayIndex; /* Der Index vom JSON Objektarray in welchem sich der Favourite befindet */
+var arrayIndex; /* Index of favourite inside the JSON object array */
 /*************************************************************/
 
 
 
-/* Name der Funktion:
+/********************* Global constants *********************/
+const DEFAULT_IMAGE = "img/noImage.png"; /* Path of the default image */
+const SUPPORTED_IMAGE_TYPES = ["image/png", "image/jpg", "image/jpeg"]; /* General image type support */
+const SUPPORTED_INPUT_IMAGE_TYPES = ".png, .jpg, .jpeg"; /* Image type support specifically for input forms */
+/*************************************************************/
+
+
+
+/*
+ * Name of the function:
  * onError
  *
- * Beschreibung:
- * Gibt Fehler aus, wenn bei einem 'Versprechen'/'Promise' ein Fehler auftritt
+ * Description:
+ * Promise - Logs errors in case something goes wrong
  *
  */
-function onError(error) { //log errors
-  console.log("Error: ${error}");
-}
-
-
-
-/* Name der Funktion:
- * encodeImageFileAsURL
- *
- * Beschreibung:
- * Konvertiert ein Bild zu einem Base64 String, sodass man diesen in lokalen Speicher sichern kann
- *
- */
-function encodeImageFileAsURL(element) {
-  var file = element.files[0];
-  var reader = new FileReader();
-  reader.onloadend = function() {
-    favouriteImage = reader.result;
-  }
-  reader.readAsDataURL(file);
+function onError(error) {
+    console.log("Error: ${error}");
 }
 
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
+ * encodeImageFileAsURL
+ *
+ * Description:
+ * Promise - Encode an image to an Base64 string which makes it possible to save images via the Storage API. The function
+ * returns a promise which has to be fulfilled in order to get the encoded image.
+ *
+ * Parameterss:
+ * - imageFile: image which will be encoded, as an element
+ *
+ */
+function encodeImageFileAsURL(imageFile) {
+    return new Promise((resolve, reject) => {
+        var reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.readAsDataURL(imageFile);
+    });
+}
+
+
+
+
+/*
+ * Name of the function:
+ * isUrlValid
+ *
+ * Description:
+ * Validates an URL
+ *
+ * Parameters:
+ * - url: URL which should be validated
+ *
+ * Return type:
+ * Boolean -> (true/flase)
+ *
+ */
+function isUrlValid(url) {
+    var res = url.match(/http(s)?:\/\/.?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);//url needs to have http prefix
+    if (res == null)
+        return false;
+    else
+        return true;
+}
+
+
+
+/*
+ * Name of the function:
+ * isImageValid
+ *
+ * Description:
+ * Checks if the image type is one of the following: .png, .jpg, .jpeg
+ *
+ * Parameters:
+ * - element: image which will be checked, as an element
+ *
+ * Return type:
+ * Boolean -> (true/flase)
+ *
+ */
+function isImageValid(imageFile) {
+
+    for (var i = 0; i < SUPPORTED_IMAGE_TYPES.length; i++) {
+        if (SUPPORTED_IMAGE_TYPES[i] == imageFile.type) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
+/*
+ * Name of the function:
  * visualizeFavourites
  *
- * Beschreibung:
- * Wird ausgeführt, wenn bei einem 'Versprechen'/'Promise' KEIN Fehler auftritt
+ * Description:
+ * Promise - Visualizes the favourites by creating certain elements and adding them to the DOM. This function also
+ * adds buttons next to each favourite so that favourites can be edited/deleted
+ *
+ * Parameters:
+ * - item: The current favourites list from the storage - received via promise
  *
  */
 function visualizeFavourites(item) {
-  var tabs = item.tabs;
-  var tabContainer = document.getElementById("tab-container");
+    var tabs = item.tabs;//JSON object array where all the favourites are saved
+    var tabContainer = document.getElementById("tab-container");
 
-  tabContainer.innerHTML = "";
-
-
-  /* Überprüfe, ob der JSON Objektarray, der die Favourites beinhaltet scon initalisiert ist */
-  if (tabs == undefined || tabs == null || tabs.length == 0) {
-    browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
-      tabs: []
-    });
-  }
-
-  /* Iterriere jeden Tab und füge ihn zur HTML-Seite hinzu */
-  for (i in tabs) {
-    /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
-    if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http") || tabs[i].image == "img/noImage.png")) {
-
-      /* Aufbau eines Tabs in der Settings-Seite:
-       *
-       * <a id="0">
-       *   <div class="button button-delete" style=""><i class="far fa-trash-alt button-text"></i></div>
-       *   <div class="button button-edit" style=""><i class="far fa-edit button-text"></i></div>
-       *   <img src="img/office.png">
-       *   <div class="text">Office 365</div>
-       * </a>
-       *
-       */
+    tabContainer.innerHTML = "";//Remove all tabs/favourites so that they will be loaded again
 
 
-      /* Erstelle <a> Element und setze die ID auf den Index der for-Loop */
-      let a = document.createElement("a");
-      a.id = "" + i;
-
-
-      /* Erstelle div Element und setze die Klasse des Elements */
-      let divBtnDelete = document.createElement("div");
-      divBtnDelete.className = "button button-delete";
-      divBtnDelete.innerHTML = "<i class='far fa-trash-alt button-text'></i>";
-      divBtnDelete.addEventListener('click', masterEventHandler, false);
-
-      /* Erstelle div Element und setze die Klasse des Elements */
-      let divBtnEdit = document.createElement("div");
-      divBtnEdit.className = "button button-edit";
-      divBtnEdit.innerHTML = "<i class='far fa-edit button-text'></i>";
-      divBtnEdit.addEventListener('click', masterEventHandler, false);
-
-      /* Erstelle <img> Element und weise dem Element das Bild zu */
-      let img = document.createElement("img");
-      img.src = tabs[i].image;
-
-      /* Erstelle div Element und setze die Klasse des Elements */
-      let divText = document.createElement("div");
-      divText.className = "text";
-      divText.innerHTML = tabs[i].title;
-
-      /* Speichere die url im Tab damit sie später verarbeitet werden kann */
-      let divURL = document.createElement("div");
-      divURL.className = "url";
-      divURL.innerHTML = tabs[i].url;
-
-
-      /* Hänge das <img> und alle <div> Element an das <a> Element */
-      a.appendChild(divBtnDelete);
-      a.appendChild(divBtnEdit);
-      a.appendChild(img);
-      a.appendChild(divText);
-      a.appendChild(divURL);
-
-      /* Hänge den fertigen Tab an den Tab-Container */
-      tabContainer.appendChild(a);
+    /* Check if the JSON object array was initialized */
+    if (tabs == undefined || tabs == null || tabs.length == 0) {
+        browser.storage.local.set({ //Initialize if it is currently uninitialized
+            tabs: []
+        });
     }
-  }
+
+    /* Go through each favourite and add it to the DOM */
+    for (i in tabs) {
+
+        /* Assure that the url is really a url and that the image is really an image */
+        if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,")
+          || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http")
+          || tabs[i].image == DEFAULT_IMAGE)) {
+
+            /*
+             * Example strucure of a favourite/tab in the settings page in HTML:
+             *
+             * <a id="0">
+             *   <div class="button button-delete"><i class="far fa-trash-alt button-text"></i></div>
+             *   <div class="button button-edit"><i class="far fa-edit button-text"></i></div>
+             *   <img src="img/firefox.png">
+             *   <div class="text">Firefox</div>
+             *   <div class="url">http://firefox.com</div>
+             * </a>
+             *
+             */
+
+
+              /* Create <a> element und set the id of the tab to the index of the loop */
+              let a = document.createElement("a");
+              a.id = i;
+
+
+              /* Create <div> element and set the classes&innerHTML
+              * Also add an event listener for click handling
+              */
+              let divBtnDelete = document.createElement("div");
+              divBtnDelete.className = "button button-delete";
+              divBtnDelete.innerHTML = "<i class='far fa-trash-alt button-text'></i>";
+              divBtnDelete.addEventListener('click', masterEventHandler, false);
+
+              /* Create <div> element and set the classes&innerHTML
+              * Also add an event listener for click handling
+              */
+              let divBtnEdit = document.createElement("div");
+              divBtnEdit.className = "button button-edit";
+              divBtnEdit.innerHTML = "<i class='far fa-edit button-text'></i>";
+              divBtnEdit.addEventListener('click', masterEventHandler, false);
+
+              /* Create <img> element and set the image */
+              let img = document.createElement("img");
+              img.src = tabs[i].image;
+
+              /* Create <div> element and set the classes&innerHTML */
+              let divText = document.createElement("div");
+              divText.className = "text";
+              divText.innerHTML = tabs[i].title;
+
+              /* Create <div> element and set the classes&innerHTML */
+              let divURL = document.createElement("div");//This element will be hidden
+              divURL.className = "url";
+              divURL.innerHTML = tabs[i].url;//The url is saved here
+
+
+              /* Append all the <div> and <img> elements to the <a> element */
+              a.appendChild(divBtnDelete);
+              a.appendChild(divBtnEdit);
+              a.appendChild(img);
+              a.appendChild(divText);
+              a.appendChild(divURL);
+
+                /* Append the favourite/tab/<a> element to the tabContainer */
+              tabContainer.appendChild(a);
+         }
+    }
 }
 
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * removeFavourite
  *
- * Beschreibung:
- * Löscht einen Favourite aus dem JSON Object Array mit Hilfe der vorher
- * definierten globalen Variable 'arrayIndex', die die Stelle angibt
+ * Description:
+ * Promise - Deletes a favourite from the JSON object array with the help of the global variables
+ * 'arrayIndex' which knows the index of the favourite
  *
- * Parameter:
- * item: Das JSON Objekt in welchem sich der zu löschende Index befindet
+ * Parameters:
+ * - item: The JSON object array in which the favourite is saved which will get deleted
  *
  */
 function removeFavourite(item) {
-  /* Lösche an der Stelle 'arrayIndex' : https://www.w3schools.com/jsref/jsref_splice.asp*/
-  item.tabs.splice(arrayIndex, 1);
+    /* Delete content at 'arrayIndex' : https://www.w3schools.com/jsref/jsref_splice.asp*/
+    item.tabs.splice(arrayIndex, 1);
 
-  /* Speicher alle Änderungen, die dem Item zugefügt wurden */
-  browser.storage.local.set({ //JSON object initialization
-    tabs: item.tabs
-  });
+    /* Save all changes that were made to the JSON object array */
+    browser.storage.local.set({
+        tabs: item.tabs
+    });
 
-  /* Aktualisiere die Änderungen im DOM */
-  let tabs = browser.storage.local.get("tabs");
-  tabs.then(visualizeFavourites, onError);
+    /* Visualize the favourites again (the delete favourite should now be gone) */
+    let tabs = browser.storage.local.get("tabs");
+    tabs.then(visualizeFavourites, onError);
 }
 
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * changeFavourite
  *
- * Beschreibung:
- * Ändert die Werte im Array und speichert ihn
- * Danach wird visualizeFavourites() aufgerufen, damit der DOM refreshed wird
+ * Description:
+ * Changes a favourite with the help of the global variables and saves the changes
+ * After the changes were saved, the favourites get visualized again -> visualizeFavourites()
  *
- * Parameter:
- * item: Das JSON Objekt bzw. der zu ändernde Array
+ * Parameters:
+ * - item: The JSON object array in which the favourite is which will be changed
  *
  */
 function changeFavourite(item) {
-  item.tabs[arrayIndex].url = favouriteURL;
-  item.tabs[arrayIndex].image = favouriteImage;
-  item.tabs[arrayIndex].title = favouriteName;
+    item.tabs[arrayIndex].url = favouriteURL;
+    item.tabs[arrayIndex].image = favouriteImage;
+    item.tabs[arrayIndex].title = favouriteName;
 
-  browser.storage.local.set({ //Speichern
-    tabs: item.tabs
-  });
+    /* Save all changes that were made to the JSON object array */
+    browser.storage.local.set({
+        tabs: item.tabs
+    });
 
-  let tabs = browser.storage.local.get("tabs");
-  tabs.then(visualizeFavourites, onError);
+    let tabs = browser.storage.local.get("tabs");
+    tabs.then(visualizeFavourites, onError);
 }
 
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * addFavourite
  *
- * Beschreibung:
- * Fügt ein vorher definierten Favoriten der Favoritenliste hinzu
+ * Description:
+ * Adds a favourite with the help of the global variables to the JSON object array and saves it
  *
- * Parameter:
- * item: Das JSON Objekt in welchem der vorher definierte Favorit gespeichert werden soll
+ * Parameters:
+ * - item: The JSON object array in which the favourite will be saved
  *
  */
 function addFavourite(item) {
-  item.tabs.push({
-    "image": favouriteImage,
-    "url": favouriteURL,
-    "title": favouriteName
-  });
+    item.tabs.push({
+        "image": favouriteImage,
+        "url": favouriteURL,
+        "title": favouriteName
+    });
 
-  /* Speicher alle Änderungen, die dem Item zugefügt wurden */
-  browser.storage.local.set({ //JSON object initialization
-    tabs: item.tabs
-  });
+    /* Save all changes that were made to the JSON object array */
+    browser.storage.local.set({
+        tabs: item.tabs
+    });
 
-  let tabs = browser.storage.local.get("tabs"); //get the JSON object
-  tabs.then(visualizeFavourites, onError); //promise
+    let tabs = browser.storage.local.get("tabs");
+    tabs.then(visualizeFavourites, onError);
 }
 
 
 
 
 
-/********************* Event Handler Funktionen *********************/
+/********************* Event handler functions *********************/
 
 
 
-/* Name der Funktion:
+/*
+ * Name of the function:
  * masterEventHandler
  *
- * Beschreibung:
- * Ist ein Eventhandler für alle Buttons eines 'Favourites' und findet heraus welche ID bzw. welchen Index der Favourite hat
+ * Description:
+ * Event handler for the buttons of a favourite. (This functions can also find out at which index a specific favourite is inside
+ * the JSON object array
  *
- *
- *  <a id="0"> <------------------------------------------------ Diese ID möchte ich herausbekommen (ID = e.target.parentElement.parentElement.id)
- *    <div class="button button-delete"> <---------------------- Dieser Button wird geklickt (div = e.target.parentElement)
+ * Little explanation of what's what:
+ *  <a id="0"> <------------------------------------------------ I want to find out this ID (ID = e.target.parentElement.parentElement.id)
+ *    <div class="button button-delete"> <---------------------- This button gets clicked (div = e.target.parentElement)
  *      <i class="far fa-trash-alt button-text"></i>
  *    </div>
- *    <div class="button button-edit"> <------------------------ Oder dieser Button wird geklickt (div = e.target.parentElement)
+ *    <div class="button button-edit"> <------------------------ OR this button gets clicked (div = e.target.parentElement)
  *      <i class="far fa-edit button-text"></i>
  *    </div>
- *    <img src="img/noImage.png">
- *    <div class="text">Beispiel</div>
- *    <div class="url">http://beispiel.de</div>
+ *    <img src="img/firefox.png">
+ *    <div class="text">Firefox</div>
+ *    <div class="url">http://firefox.com</div>
  *  </a>
  *
  */
 function masterEventHandler(e) {
 
-  arrayIndex = e.target.parentElement.parentElement.id;
-  let buttonElement = e.target.parentElement;
-  let aElement = e.target.parentElement.parentElement;
-
-  /* Finde durch den Klassenname heraus, ob der Edit oder ein anderer Button der den masterEventHandler benutzt geklickt wurde --->(Remove Button)*/
-  if (buttonElement.className.indexOf("edit") !== -1) {
-
-    /* Nachden der Change Button geklickt wurde soll man die Werte ändern können
-    -> Erstelle Elemente (bzw. input Elemente) und ersetze die alten Elemente */
-
-    let applyButton = document.createElement("div");
-    applyButton.className = "button button-change"
-    applyButton.innerHTML = "<i class='fas fa-check button-text'></i>"
-    applyButton.addEventListener('click', masterEventHandler, false);
-    aElement.replaceChild(applyButton, aElement.childNodes[1]);
-
-    let inputImg = document.createElement("input");
-    inputImg.type = "file";
-    inputImg.name = "favouriteImage";
-    inputImg.accept = "image/*";
-    aElement.replaceChild(inputImg, aElement.childNodes[2]); //Das img Element ist immer das 3 child von a im DOM
-
-    let inputName = document.createElement("input");
-    inputName.type = "text";
-    inputName.name = "favouriteName";
-    inputName.value = aElement.childNodes[3].innerHTML;
-    aElement.replaceChild(inputName, aElement.childNodes[3]); //Das div Element ist immer das 4 child von a im DOM
+    arrayIndex = e.target.parentElement.parentElement.id;
+    let buttonElement = e.target.parentElement;
+    let aElement = e.target.parentElement.parentElement;
 
 
-    let inputURL = document.createElement("input");
-    inputURL.type = "text";
-    inputURL.name = "favouriteURL";
-    inputURL.value = aElement.childNodes[4].innerHTML;
-    aElement.replaceChild(inputURL, aElement.childNodes[4]); //Das div Element ist immer das 5 child von a im DOM
+    /* Find out if an edit button or else was clicked by looking at the class name */
+    if (buttonElement.className.indexOf("edit") !== -1) {
+
+        /*
+         * After the edit button was clicked it will update the favourites innerHTML so that there are input fields.
+         * These input fields get created and added to the DOM here
+         */
+        let applyButton = document.createElement("div");
+        applyButton.className = "button button-change"
+        applyButton.innerHTML = "<i class='fas fa-check button-text'></i>"
+        applyButton.addEventListener('click', masterEventHandler, false);
+        aElement.replaceChild(applyButton, aElement.childNodes[1]);//The element which gets replaced always has the index 1 inside element <a>
+
+        let inputImg = document.createElement("input");
+        inputImg.type = "file";
+        inputImg.accept = SUPPORTED_INPUT_IMAGE_TYPES;
+        aElement.replaceChild(inputImg, aElement.childNodes[2]);//The element which gets replaced always has the index 2 inside element <a>
+
+        let inputName = document.createElement("input");
+        inputName.type = "text";
+        inputName.name = "favouriteName";
+        inputName.value = aElement.childNodes[3].innerHTML;
+        aElement.replaceChild(inputName, aElement.childNodes[3]);//The element which gets replaced always has the index 3 inside element <a>
 
 
-  } else if (buttonElement.className.indexOf("delete") !== -1) {
-    /* Funktion aufrufen, die den Favourite löscht */
-    let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
-    tabs1.then(removeFavourite, onError); //promise
-  } else { //Change button wurde geklcikt! TODO auf switch case wechseln?! default: fehler konnte nicht klick zuordnen
+        let inputURL = document.createElement("input");
+        inputURL.type = "text";
+        inputURL.name = "favouriteURL";
+        inputURL.value = aElement.childNodes[4].innerHTML;
+        aElement.replaceChild(inputURL, aElement.childNodes[4]);//The element which gets replaced always has the index 4 inside element <a>
 
-    /* Bekomme die URL und den Namen aus den Input Elementen, welche in a sind */
-    favouriteURL = aElement.childNodes[4].value
-    favouriteName = aElement.childNodes[3].value;
 
-    /* Wenn kein neues Bild beim Editieren hochgeladen wird */
-    if (aElement.childNodes[2].files.length == 0) {
+        /*
+         * The user will now type in any changes and should be clicking the apply button.
+         * Once the apply button is clicked, this masterEventHandler function gets called again and handles the click of the apply button
+         */
 
-      let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
-      tabs1.then(function(item) {
-        //TODO if abfrage entfernen...
-        /* Überprüfe, ob bereits ein Bild vor dem editieren existierte (wenn nicht dann nimm standardbild) */
-        if (item.tabs[arrayIndex].image.startsWith("data:image") == false) {
-          favouriteImage = "img/noImage.png";
+
+    } else if (buttonElement.className.indexOf("delete") !== -1) {//If the delete button was clicked
+
+        /* Call function which deletes the favourite */
+        let tabs = browser.storage.local.get("tabs");
+        tabs.then(removeFavourite, onError);
+
+    } else { //If the apply button was clicked
+
+        /* Get the URL and the title/name from the input fields (childs of <a>)*/
+        favouriteURL = aElement.childNodes[4].value
+        favouriteName = aElement.childNodes[3].value;
+
+        /*
+         * If no new image was uploaded after editing
+         * This needs to be checked because the global variable 'favouriteImage' has to be updated
+         */
+        if (aElement.childNodes[2].files.length == 0) {
+
+            let tabs = browser.storage.local.get("tabs"); //get the JSON object array
+            tabs.then(function(item) {
+                /* Check if there was an image before editing - if not then set the default image */
+                if (item.tabs[arrayIndex].image.startsWith("data:image") == false) {
+                    favouriteImage = DEFAULT_IMAGE;
+                }
+
+                /* If there was an image before editing (but this image is from a website) save this image again */
+                if (item.tabs[arrayIndex].image.startsWith("http") == true || item.tabs[arrayIndex].image.startsWith("data:image") == true) {
+                    favouriteImage = item.tabs[arrayIndex].image + ""; //TODO check if all of this is really necessary - is there another way?
+                }
+            }, onError); //promise
+        } else { /* If a new image was uploaded after editing */
+
+            /* Check if the image is a .png/.jpeg/.jpg */
+            if (isImageValid(aElement.childNodes[2].files[0])) {
+                /* Encode image to Base64 string */
+                var encodedImage = encodeImageFileAsURL(aElement.childNodes[2].files[0]);
+                encodedImage.then(function(resolve) {
+                    favouriteImage = resolve;
+
+                    /* Only apply changes if all inputs are valid */
+                    if (isUrlValid(favouriteURL) && favouriteName.length > 0) {
+                        /* -> changeFavourite: Save changes, and reload favourites to DOM */
+                        let tabs = browser.storage.local.get("tabs");
+                        tabs.then(changeFavourite, onError);
+                    }
+                }, onError);
+            } else {
+                /* Set default image */
+                favouriteImage = DEFAULT_IMAGE;
+
+                /* Only apply changes if all inputs are valid */
+                if (isUrlValid(favouriteURL) && favouriteName.length > 0) {
+                    /* -> changeFavourite: Save changes, and reload favourites to DOM */
+                    let tabs = browser.storage.local.get("tabs");
+                    tabs.then(changeFavourite, onError);
+                }
+            }
         }
 
-        /* Wenn das Bild über url geholt wird */
-        if (item.tabs[arrayIndex].image.startsWith("http") == true || item.tabs[arrayIndex].image.startsWith("data:image") == true) {
-          favouriteImage = item.tabs[arrayIndex].image + ""; //TODO herausfinden weshalb hier favouriteImage geändert werden muss
+
+        /* Only apply changes if all inputs are valid */
+        if(isUrlValid(favouriteURL) && favouriteName.length > 0){
+          /* -> changeFavourite: Save changes, and reload favourites to DOM */
+          let tabs = browser.storage.local.get("tabs");
+          tabs.then(changeFavourite, onError);
         }
 
-
-      }, onError); //promise
-
-    } else { /* Wenn ein neues Bild beim Editieren hochgeladen wurde */
-      /* Hochgeladenes Bild zu Base64 encoden */
-      encodeImageFileAsURL(aElement.childNodes[2]);
     }
-
-    /* -> changeFavourite: Ändere die Werte, speicher den Array und refreshe den DOM */
-    let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
-    tabs1.then(changeFavourite, onError); //promise
-  }
 
 }
 
@@ -319,29 +439,65 @@ function masterEventHandler(e) {
 /*
  * Eventhandler - onclick
  *
- * Beschreibung:
- * Erfasst wann der Benutzer den 'Add' Button klickt und verarbeitet die vom Nutzer eingegebenen Daten.
- * Die Daten werden dann in der Funktion addFavorite weiterbenutzt
+ * Description:
+ * Event handler for the button which adds new favourites. This function gets the data from the input fields and
+ * creates a new favourite with this data (the favourite is actually create inside addFavourite())
  *
  */
 document.getElementById("add-favourite").onclick = function() {
-  var image = document.getElementById("image");
+    /* Get input fields (image, title/name, url/address) */
+    let imageElement = document.getElementById("image");
+    let titleElement = document.getElementById("name");
+    let urlElement = document.getElementById("url");
 
-  /* Überprüfe, ob der Benutzer kein Bild hochgeladen hat */
-  if (image.files.length == 0) {
-    /* Setze default Bild */
-    favouriteImage = "img/noImage.png";
-  } else {
-    /* Hochgeladenes Bild zu Base64 encoden */
-    encodeImageFileAsURL(image);
-  }
+    /* Check if the URL is valid and if the user gave the favourite a title */
+    if (isUrlValid(urlElement.value) && titleElement.value.length > 0) {
+        favouriteName = titleElement.value;
+        favouriteURL = urlElement.value;
 
-  favouriteName = document.getElementById("name").value;
-  favouriteURL = document.getElementById("url").value;
+        /* Remove the border-color which might have been added if the previous inputs were not valid */
+        url.style.removeProperty('border-color');
+        titleElement.style.removeProperty('border-color');
 
-  /* Funktion aufrufen, die die input Daten zu einem Favourite macht und ihn hinzufügt */
-  let tabs1 = browser.storage.local.get("tabs"); //get the JSON object
-  tabs1.then(addFavourite, onError); //promise
+
+        /* If the user DID NOT upload an image */
+        if (imageElement.files.length == 0) {
+            /* Set default image */
+            favouriteImage = DEFAULT_IMAGE;
+        } else { //if the user actually DID upload an image
+
+            /* Check if the image is a .png/.jpeg/.jpg */
+            if (isImageValid(imageElement.files[0])) {
+                var encodedImage = encodeImageFileAsURL(imageElement.files[0]);
+                encodedImage.then(function(resolve) {
+                    favouriteImage = resolve;
+                    let tabs = browser.storage.local.get("tabs");
+                    tabs.then(addFavourite, onError);
+                }, onError);
+            } else {
+                /* Set default image */
+                favouriteImage = DEFAULT_IMAGE;
+                let tabs = browser.storage.local.get("tabs");
+                tabs.then(addFavourite, onError);
+            }
+        }
+
+      /* Call function which adds the new favourite via global variables */
+      let tabs = browser.storage.local.get("tabs");
+      tabs.then(addFavourite, onError);
+
+    } else { /*If one of the inputs were not valid, then find out which one is not valid and highlight it by changing the border-color to red */
+        if (!isUrlValid(urlElement.value)) {
+            url.style.setProperty('border-color', '#D32F2F');
+        } else {
+            url.style.removeProperty('border-color');
+        }
+        if (titleElement.value.length == 0) {
+            titleElement.style.setProperty('border-color', '#D32F2F');
+        } else {
+            titleElement.style.removeProperty('border-color');
+        }
+    }
+
 }
-
 /***********************************************************/

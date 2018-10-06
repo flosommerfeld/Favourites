@@ -6,16 +6,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <!-- Lade alle Icons von Fontawesome -->
+  <!-- Load all icons from Fontawesome -->
   <link rel="stylesheet" href="css/fontawesome-all.css">
 
   <!-- Font: Roboto -->
   <link rel="stylesheet" href="css/roboto-font.css">
 
-  <!-- Hauptstyle .css Datei -->
+  <!-- Main stylesheet -->
   <link href="css/style.css" rel="stylesheet">
 
-  <!-- Anpassungen der Haupstyle .css Datei -->
+  <!-- Small adjustments (of the main stylesheet) for this page -->
   <link href="css/settings.css" rel="stylesheet">
 
 
@@ -24,19 +24,19 @@
 
 <body>
 
-  <!-- Navigationsleiste -->
+  <!-- Navigation bar -->
   <div class="navbar">
     <div class="text">Settings</div>
   </div>
 
 
-  <!-- Container, der die Tabs bzw. Favourites beinhaltet -->
+  <!-- Container which 'contains' all of the favourites -->
   <div class="container" id="tab-container">
-    <!-- Inhalte werden dynamisch hinzugefügt -->
+    <!-- The content will be added dynamically via visualizeFavourites() -->
   </div>
 
 
-  <!-- Container, der den Tab beinhaltet, welcher Favourites hinzufügt -->
+  <!-- Container for the input fields with which a new favourite can be added -->
   <div class="container" id="footer-container">
   <form>
     <div class="row">
@@ -60,7 +60,7 @@
         <label for="image">Image</label>
       </div>
       <div class="col-90">
-        <input type="file" id="image" name="favouriteImage" accept="image/*">
+        <input type="file" id="image" name="favouriteImage" accept=".png, .jpg, .jpeg">
       </div>
     </div>
     <div class="row">
@@ -70,7 +70,7 @@
 </div>
 
 
-  <!-- JS-Skripts für die dynamische Darstellung bzw. für das dynamische Verhalten -->
+  <!-- JS scripts for the dynamic behaviour -->
   <script src="js/functions/settings-functions.js"></script>
   <script src="js/settings.js"></script>
 
