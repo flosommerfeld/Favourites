@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "Favourites",
   "version": "1.2.1",
-  "permissions": ["storage", "contextMenus", "activeTab"],
+  "permissions": ["storage", "unlimitedStorage", "contextMenus", "activeTab"],
 
   "description": "Simple alternative to Firefox's bookmarks.",
   "homepage_url": "https://flosommerfeld.github.io",
