@@ -1,77 +1,80 @@
 /*
- * Name der Funktion:
+ * Name of the function:
  * onError
  *
- * Beschreibung:
- * Gibt Fehler aus, wenn bei einem 'Versprechen'/'Promise' ein Fehler auftritt
+ * Description:
+ * Promise - Logs errors in case something goes wrong
  *
  */
-function onError(error) { //log errors
+function onError(error) {
   console.log("Error: ${error}");
 }
 
 
 
 /*
- * Name der Funktion:
+ * Name of the function:
  * visualizeFavourites
  *
- * Beschreibung:
- * Wird ausgeführt, wenn bei einem 'Versprechen'/'Promise' KEIN Fehler auftritt
+ * Description:
+ * Promise - Visualizes the favourites by creating certain elements and adding them to the DOM
+ *
+ * Parameters:
+ * - item: The current favourites list from the storage - received via promise
  *
  */
 function visualizeFavourites(item) {
-  var tabs = item.tabs;
+  var tabs = item.tabs;//JSON object array where all the favourites are saved
   var tabContainer = document.getElementById("tab-container");
 
   tabContainer.innerHTML = "";
 
 
-  /* Überprüfe, ob der JSON Objektarray, der die Favourites beinhaltet scon initalisiert ist */
+  /* Check if the JSON object array was initialized */
   if (tabs == undefined || tabs == null || tabs.length == 0) {
-    browser.storage.local.set({ //JSON-Objektinitialisierung - Wird gemacht wenn vorher noch nicht initialisiert
+    browser.storage.local.set({ //Initialize if it is currently uninitialized
       tabs: []
     });
 
     /* Show message: Add favourites via settings page... */
-    document.getElementById("no-favourites-message").style.display = "flex"; /* vorher block */
+    document.getElementById("no-favourites-message").style.display = "flex"; /* change from block to flex */
   }
 
 
-  /* Iterriere jeden Tab und füge ihn zur HTML-Seite hinzu */
+  /* Go through each favourite and add it to the DOM */
   for (i in tabs) {
 
-    /* Sicherstellen, dass die url eine url ist und, dass das Bild auch wirklich ein Bild ist */
+    /* Assure that the url is really a url and that the image is really an image */
     if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,") || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http") || tabs[i].image == "img/noImage.png")) {
 
-      /* Aufbau eines Tabs:
+      /* Example strucure of a favourite/tab in HTML:
        *
-       * <a href="https://www.aulis.hs-bremen.de/" target="_blank">
-       *   <img src="img/aulis.png">
-       *   <div class="text">Aulis</div>
+       * <a href="https://www.firefox.com/" target="_blank">
+       *   <img src="img/firefox.png">
+       *   <div class="text">Firefox</div>
        * </a>
        *
        */
 
-      /* Erstelle <a> Element und weise dem Element die url zu */
+      /* Create <a> element and set the url */
       let a = document.createElement("a");
       a.href = tabs[i].url;
 
-      /* Erstelle <img> Element und weise dem Element das Bild zu */
+      /* Create <img> element and set the image */
       let img = document.createElement("img");
       img.src = tabs[i].image;
 
-      /* Erstelle div Element und setze die Klasse des Elements */
+      /* Create <div> element and set the classes&innerHTML */
       let div = document.createElement("div");
       div.className = "text";
       div.innerHTML = tabs[i].title;
 
 
-      /* Hänge das <img> und <div> Element an das <a> Element */
+      /* Append the <img> and <div> element to the <a> element */
       a.appendChild(img);
       a.appendChild(div);
 
-      /* Hänge den fertigen Tab an den Tab-Container */
+      /* Append the favourite/tab/<a> element to the tabContainer */
       tabContainer.appendChild(a);
     }
   }

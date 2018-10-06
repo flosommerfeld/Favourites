@@ -1,7 +1,8 @@
-/* Öffne die Optionsseite vom Addon */
+/* Open the options/settings page of the WebExtension */
 var opening = browser.runtime.openOptionsPage();
 opening.then(onOpened, onError);
 
-/* Bekomme die ID vom Tab, in welchem dieses Script läuft sodass der Tab danach geschlossen werden kann */
+/* Get the ID of the tab in which redirect.html and thus this script were loaded
+in order to close the tab after opening the options page */
 var gettingCurrent = browser.tabs.getCurrent();
 gettingCurrent.then(onGotTab, onError);

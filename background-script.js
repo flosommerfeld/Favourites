@@ -1,9 +1,9 @@
 /*
- * Name der Funktion:
+ * Name of the function:
  * onError
  *
- * Beschreibung:
- * Gibt Fehler aus, wenn bei einem 'Versprechen'/'Promise' ein Fehler auftritt
+ * Description:
+ * Promise - Logs errors in case something goes wrong
  *
  */
 function onError(error) { //log errors
@@ -12,60 +12,66 @@ function onError(error) { //log errors
 
 
 
-/*
-Called when the item has been created, or when creation failed due to an error.
-We'll just log success/failure here.
-*/
+/* Name of the function:
+ * onCreated
+ *
+ * Description:
+ * Is called when the context menu item has been created, or when creation failed due to an error.
+ * I'll just log success/failure here.
+ */
 function onCreated() {
   if (browser.runtime.lastError) {
-    console.log(`Error: ${browser.runtime.lastError}`);
+    console.log("Error: ${browser.runtime.lastError}");
   } else {
     console.log("Item created successfully");
   }
 }
 
 
-/* Erstelle 'contextMenu' item/button */
+/* Create 'contextMenu' item/button */
 browser.contextMenus.create({
   id: "add-to-favourites",
   title: "Add website to favourites",
   contexts: ["all"]
-}, onCreated);
+}, onCreated);//promise
 
 
-/* Eventhandler für die buttons aus dem 'contextMenu' */
+/* Eventhandler for item/button from the 'contextMenu' */
 browser.contextMenus.onClicked.addListener(function(info, tab) {
   switch (info.menuItemId) {
     case "add-to-favourites":
 
-      /* Dank der 'activeTab' Permission gibt es hier mehr Infos über 'tab' */
+      /* Thanks to the 'activeTab' permission i can get more information about 'tab' (see parameter) */
 
-      /* Lade die Tabs aus dem lokalen Speicher */
+      /* Load the JSON object array in which all the favourites are saved */
       let tabs = browser.storage.local.get("tabs");
       tabs.then(function(item) {
+        /* Give the new favourite the data of this active tab */
         let image = tab.favIconUrl;
         let url = tab.url
         let title = tab.title;
 
-        //Sorge dafür, dass wenn das faviconbild nicht exisitert für standardbild
-        //TODO Allg. Funktion fürs Hinzufügen von fvourites, die alles überprüft
+
+        //TODO General function for adding new favourites which checks everything
+
+        /* If the website/active tab doesn't have a favicon then set the default image */
         if (image == null) {
           image = "img/noImage.png";
         }
 
-          /* Füge die aktuelle Seite zu den Favourite hinzu */
+          /* Add the website of the active tab to the JSON object array */
           item.tabs.push({
             "image": image,
             "url": url,
             "title": title
           });
 
-          /* Speicher alle Änderungen, die dem Item zugefügt wurden */
-          browser.storage.local.set({ //JSON object initialization
+          /* Save alls changes that were made to the JSON object array */
+          browser.storage.local.set({
             tabs: item.tabs
           });
 
-      }, onError);
+      }, onError);//promise
 
       break;
 
