@@ -7,8 +7,23 @@
  *
  */
 function onError(error) {
-  console.log("Error: ${error}");
+    console.log("Error: ${error}");
 }
+
+
+
+/*
+ * Name of the function:
+ * onClosed
+ *
+ * Description:
+ * Promise - Logs that the tab was closed
+ *
+ */
+function onClosed() {
+    console.log("Tab successfully closed");
+}
+
 
 
 /*
@@ -19,8 +34,8 @@ function onError(error) {
  * Promise - Logs that the options page was opened
  *
  */
- function onOpened() {
-  console.log("Options page opened");
+function onOpened() {
+    console.log("Options page opened");
 }
 
 
@@ -33,23 +48,9 @@ function onError(error) {
  *
  */
 function onGotTab(tabInfo) {
-  console.log(tabInfo);
+    console.log(tabInfo);
 
-  /* Close the tab */
-  var removing = browser.tabs.remove(tabInfo.id);
-  removing.then(onClosed, onError);
-
-}
-
-
-/*
- * Name of the function:
- * onClosed
- *
- * Description:
- * Promise - Logs that the tab was closed
- *
- */
-function onClosed() {
-  console.log("Tab successfully closed");
+    /* Close the tab */
+    let removing = browser.tabs.remove(tabInfo.id);
+    removing.then(onClosed, onError);
 }
