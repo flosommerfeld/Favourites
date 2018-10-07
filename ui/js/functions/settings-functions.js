@@ -136,7 +136,7 @@ function visualizeFavourites(item) {
     for (i in tabs) {
 
         /* Assure that the url is really a url and that the image is really an image */
-        if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,")
+        if (tabs[i].image != undefined && tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,")
           || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http")
           || tabs[i].image == DEFAULT_IMAGE)) {
 
@@ -272,7 +272,7 @@ function changeFavourite(item) {
  * - item: The JSON object array in which the favourite will be saved
  *
  */
-function addFavourite(item) {
+function addFavourite(item) {console.log(item.tabs);
     item.tabs.push({
         "image": favouriteImage,
         "url": favouriteURL,
@@ -464,6 +464,10 @@ document.getElementById("add-favourite").onclick = function() {
         if (imageElement.files.length == 0) {
             /* Set default image */
             favouriteImage = DEFAULT_IMAGE;
+			
+			/* Call function which adds the new favourite via global variables */
+			let tabs = browser.storage.local.get("tabs");
+			tabs.then(addFavourite, onError);
         } else { //if the user actually DID upload an image
 
             /* Check if the image is a .png/.jpeg/.jpg */
@@ -471,20 +475,21 @@ document.getElementById("add-favourite").onclick = function() {
                 var encodedImage = encodeImageFileAsURL(imageElement.files[0]);
                 encodedImage.then(function(resolve) {
                     favouriteImage = resolve;
-                    let tabs = browser.storage.local.get("tabs");
-                    tabs.then(addFavourite, onError);
+					
+					/* Call function which adds the new favourite via global variables */
+					let tabs = browser.storage.local.get("tabs");
+					tabs.then(addFavourite, onError);
                 }, onError);
             } else {
                 /* Set default image */
                 favouriteImage = DEFAULT_IMAGE;
-                let tabs = browser.storage.local.get("tabs");
-                tabs.then(addFavourite, onError);
+				
+				/* Call function which adds the new favourite via global variables */
+				let tabs = browser.storage.local.get("tabs");
+				tabs.then(addFavourite, onError);
             }
         }
 
-      /* Call function which adds the new favourite via global variables */
-      let tabs = browser.storage.local.get("tabs");
-      tabs.then(addFavourite, onError);
 
     } else { /*If one of the inputs were not valid, then find out which one is not valid and highlight it by changing the border-color to red */
         if (!isUrlValid(urlElement.value)) {
