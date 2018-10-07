@@ -46,7 +46,7 @@ console.log(tabs);
     for (i in tabs) {
 
         /* Assure that the url is really a url and that the image is really an image */
-        if (tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,")
+        if (tabs[i].image != undefined && tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,")
           || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http")
           || tabs[i].image == "img/noImage.png")) {
 
