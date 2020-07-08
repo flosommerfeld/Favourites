@@ -52,6 +52,8 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
     switch (info.menuItemId) {
         case "add-to-favourites":
 
+			console.log(tab);
+		
             /* Thanks to the 'activeTab' permission i can get more information about 'tab' (see parameter) */
 
             /* Load the JSON object array in which all the favourites are saved */
@@ -62,6 +64,7 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
                 let url = tab.url;
                 let title = tab.title;
 
+				console.log("HALLO");
 
                 /* If the website/active tab doesn't have a favicon then set the default image */
                 if (image == null) {
