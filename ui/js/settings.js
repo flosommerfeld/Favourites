@@ -3,7 +3,6 @@ let tabs = browser.storage.local.get("tabs");//get the JSON object array
 tabs.then(visualizeFavourites, onError);//promise
 
 
-
 /********************* Global variables *********************/
 var favouriteImage; /* Image of the favourite */
 var favouriteName; /* Name/title of the favourite */
@@ -13,13 +12,11 @@ var arrayIndex; /* Index of favourite inside the JSON object array */
 /*************************************************************/
 
 
-
 /********************* Global constants *********************/
 const DEFAULT_IMAGE = "img/noImage.png"; /* Path of the default image */
 const SUPPORTED_IMAGE_TYPES = ["image/png", "image/jpg", "image/jpeg"]; /* General image type support */
 const SUPPORTED_INPUT_IMAGE_TYPES = ".png, .jpg, .jpeg"; /* Image type support specifically for input forms */
 /*************************************************************/
-
 
 
 /*
@@ -35,7 +32,6 @@ function onError(error) {
 }
 
 
-
 /*
  * Name of the function:
  * encodeImageFileAsURL
@@ -44,7 +40,7 @@ function onError(error) {
  * Promise - Encode an image to an Base64 string which makes it possible to save images via the Storage API. The function
  * returns a promise which has to be fulfilled in order to get the encoded image.
  *
- * Parameterss:
+ * Parameters:
  * - imageFile: image which will be encoded, as an element
  *
  */
@@ -57,8 +53,6 @@ function encodeImageFileAsURL(imageFile) {
         reader.readAsDataURL(imageFile);
     });
 }
-
-
 
 
 /*
@@ -82,7 +76,6 @@ function isUrlValid(url) {
     else
         return true;
 }
-
 
 
 /*
@@ -109,7 +102,6 @@ function isImageValid(imageFile) {
 
     return false;
 }
-
 
 
 /*
@@ -142,8 +134,7 @@ function visualizeFavourites(item) {
     for (i in tabs) {
 
         /* Assure that the url is really a url and that the image is really an image */
-        if (tabs[i].image != undefined && tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image/jpeg;base64,")
-          || tabs[i].image.startsWith("data:image/png;base64,") || tabs[i].image.startsWith("http")
+        if (tabs[i].image != undefined && tabs[i].url.startsWith("http") && (tabs[i].image.startsWith("data:image") || tabs[i].image.startsWith("http")
           || tabs[i].image == DEFAULT_IMAGE)) {
 
             /*
@@ -210,7 +201,6 @@ function visualizeFavourites(item) {
 }
 
 
-
 /*
  * Name of the function:
  * removeFavourite
@@ -238,7 +228,6 @@ function removeFavourite(item) {
 }
 
 
-
 /*
  * Name of the function:
  * changeFavourite
@@ -264,7 +253,6 @@ function changeFavourite(item) {
     let tabs = browser.storage.local.get("tabs");
     tabs.then(visualizeFavourites, onError);
 }
-
 
 
 /*
@@ -295,13 +283,7 @@ function addFavourite(item) {console.log(item.tabs);
 }
 
 
-
-
-
 /********************* Event handler functions *********************/
-
-
-
 /*
  * Name of the function:
  * masterEventHandler
@@ -441,7 +423,6 @@ function masterEventHandler(e) {
 }
 
 
-
 /*
  * Eventhandler - onclick
  *
@@ -495,7 +476,6 @@ document.getElementById("add-favourite").onclick = function() {
 				tabs.then(addFavourite, onError);
             }
         }
-
 
     } else { /*If one of the inputs were not valid, then find out which one is not valid and highlight it by changing the border-color to red */
         if (!isUrlValid(urlElement.value)) {

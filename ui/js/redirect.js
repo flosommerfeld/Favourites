@@ -8,7 +8,6 @@ var gettingCurrent = browser.tabs.getCurrent();
 gettingCurrent.then(onGotTab, onError);
 
 
-
 /*
  * Name of the function:
  * onError
@@ -22,7 +21,6 @@ function onError(error) {
 }
 
 
-
 /*
  * Name of the function:
  * onClosed
@@ -34,7 +32,6 @@ function onError(error) {
 function onClosed() {
     console.log("Tab successfully closed");
 }
-
 
 
 /*

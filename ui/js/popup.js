@@ -3,8 +3,6 @@ let tabs = browser.storage.local.get("tabs");//get the JSON object array
 tabs.then(visualizeFavourites, onError);//promise
 
 
-
-
 /*
  * Name of the function:
  * onError
@@ -16,7 +14,6 @@ tabs.then(visualizeFavourites, onError);//promise
 function onError(error) {
     console.log("Error: ${error}");
 }
-
 
 
 /*
