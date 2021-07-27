@@ -1,7 +1,8 @@
 /********************* Global constants *********************/
 const DEFAULT_IMAGE = "img/noImage.png";
+const CONTEXT_MENU_ID = "add-to-favourites";
+const CONTEXT_MENU_TITLE = "Add website to favourites";
 /*************************************************************/
-
 
 
 /*
@@ -15,7 +16,6 @@ const DEFAULT_IMAGE = "img/noImage.png";
 function onError(error) {
     console.log("Error: ${error}");
 }
-
 
 
 /* Name of the function:
@@ -34,15 +34,10 @@ function onCreated() {
 }
 
 
-
-
-
-
-
 /* Create 'contextMenu' item/button */
 browser.contextMenus.create({
-    id: "add-to-favourites",
-    title: "Add website to favourites",
+    id: CONTEXT_MENU_ID,
+    title: CONTEXT_MENU_TITLE,
     contexts: ["all"]
 }, onCreated);//promise
 
@@ -51,7 +46,7 @@ browser.contextMenus.create({
 browser.contextMenus.onClicked.addListener(function(info, tab) {
     switch (info.menuItemId) {
         case "add-to-favourites":
-
+		
             /* Thanks to the 'activeTab' permission i can get more information about 'tab' (see parameter) */
 
             /* Load the JSON object array in which all the favourites are saved */
@@ -81,8 +76,7 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
                 });
 
             }, onError);//promise
-
+			
             break;
-
     }
 })
