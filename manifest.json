@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Favourites",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "permissions": ["storage", "unlimitedStorage", "contextMenus", "activeTab"],
 
   "description": "Simple alternative to Firefox's bookmarks.",
@@ -30,7 +30,7 @@
   "applications": {
     "gecko": {
       "id": "favourites@flosommerfeld.addons",
-      "strict_min_version": "42.0"
+      "strict_min_version": "57.0"
     }
   }
 
