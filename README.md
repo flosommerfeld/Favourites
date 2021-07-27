@@ -1,4 +1,4 @@
-# Favourites [![Mozilla Add-on](https://img.shields.io/badge/Version-1.2.3-green.svg)](https://github.com/flosommerfeld/Favourites/releases/tag/v1.2.3)
+# Favourites [![Mozilla Add-on](https://img.shields.io/badge/Version-1.2.4-green.svg)](https://github.com/flosommerfeld/Favourites/releases/tag/v1.2.4)
 
 Favourites is a Mozilla Firefox WebExtension which can be used as an alternative to the common Firefox bookmarks. Favourites adds an icon to your browsers toolbar from which you can access all of your saved pages. The user can manage his favourite pages inside the WebExtensions settings page.
 
